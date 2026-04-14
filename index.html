@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Shrisha Patil | Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #050510;
+      --bg2: #0a0a1a;
+      --surface: rgba(255,255,255,0.04);
+      --surface-hover: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.08);
+      --accent: #7c6fff;
+      --accent2: #ff6f9c;
+      --accent3: #6ff7c8;
+      --text: #f0f0ff;
+      --text-muted: rgba(240,240,255,0.5);
+      --glow: rgba(124,111,255,0.3);
+    }
+    [data-theme="light"] {
+      --bg: #f5f5ff;
+      --bg2: #eeeeff;
+      --surface: rgba(0,0,0,0.04);
+      --surface-hover: rgba(0,0,0,0.08);
+      --border: rgba(0,0,0,0.1);
+      --text: #0d0d2b;
+      --text-muted: rgba(13,13,43,0.55);
+      --glow: rgba(124,111,255,0.15);
+    }
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.4s, color 0.4s;
+    }
+    #bg-canvas {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.2rem 4rem;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(5,5,16,0.6);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.4s;
+    }
+    [data-theme="light"] nav { background: rgba(245,245,255,0.7); }
+    .nav-logo {
+      font-family: 'Syne', sans-serif;
+      font-weight: 800;
+      font-size: 1.3rem;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .nav-links { display: flex; gap: 2rem; list-style: none; align-items: center; }
+    .nav-links a {
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+      text-decoration: none;
+      color: var(--text-muted);
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    #theme-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    #theme-btn:hover { background: var(--surface-hover); transform: rotate(20deg); }
+    section, header.hero { position: relative; z-index: 1; }
+    header.hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+    }
+    .hero-inner { max-width: 700px; }
+    .hero-avatar {
+      width: 140px; height: 140px;
+      border-radius: 50%;
+      border: 3px solid var(--accent);
+      box-shadow: 0 0 40px var(--glow);
+      object-fit: cover;
+      margin-bottom: 2rem;
+      animation: float 4s ease-in-out infinite;
+      background: rgba(124,111,255,0.15);
+    }
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+    .hero-tag {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      background: rgba(111,247,200,0.1);
+      border: 1px solid rgba(111,247,200,0.2);
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 800;
+      line-height: 1.05;
+      letter-spacing: -2px;
+      margin-bottom: 1rem;
+    }
+    .hero h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+    }
+    .hero-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      text-decoration: none;
+      padding: 0.85rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.3px;
+      box-shadow: 0 8px 30px rgba(124,111,255,0.4);
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .hero-cta:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(124,111,255,0.5); }
+    .section-wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 6rem 2rem;
+    }
+    .section-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.8rem;
+    }
+    .section-title {
+      font-family: 'Syne', sans-serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 3rem;
+      line-height: 1.1;
+    }
+    .divider { width: 100%; height: 1px; background: var(--border); }
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+    @media(max-width:768px) { .about-grid { grid-template-columns: 1fr; } }
+    .about-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+    .about-card:hover {
+      background: var(--surface-hover);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0,0,0,0.2);
+    }
+    .about-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent2);
+      margin-bottom: 0.6rem;
+    }
+    .about-card p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+    .about-card strong { color: var(--text); }
+    .achieve-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+    .achieve-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 1.8rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+    .achieve-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      border-radius: 20px 20px 0 0;
+    }
+    .achieve-card:hover {
+      background: var(--surface-hover);
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    }
+    .achieve-icon { font-size: 2rem; margin-bottom: 1rem; }
+    .achieve-card h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+    .achieve-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+    .achieve-badge {
+      display: inline-block;
+      margin-top: 0.8rem;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--accent3);
+      background: rgba(111,247,200,0.1);
+      border: 1px solid rgba(111,247,200,0.2);
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
+    }
+    .project-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.25s;
+    }
+    .project-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 24px 60px rgba(0,0,0,0.3);
+      border-color: var(--accent);
+    }
+    .project-thumb {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, rgba(124,111,255,0.15), rgba(255,111,156,0.15));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+    }
+    .project-body { padding: 1.5rem; }
+    .project-body h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    .project-body p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; }
+    .project-tags { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .project-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--accent);
+      background: rgba(124,111,255,0.1);
+      border: 1px solid rgba(124,111,255,0.2);
+      border-radius: 20px;
+      padding: 0.2rem 0.7rem;
+    }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    .gallery-item {
+      aspect-ratio: 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      transition: all 0.2s;
+      position: relative;
+    }
+    .gallery-item:hover {
+      transform: scale(1.04);
+      border-color: var(--accent);
+      box-shadow: 0 10px 30px rgba(124,111,255,0.2);
+    }
+    .gallery-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 0.6rem;
+      background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-align: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+      color: #fff;
+    }
+    .gallery-item:hover .gallery-label { opacity: 1; }
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+    @media(max-width:768px) { .contact-grid { grid-template-columns: 1fr; } }
+    .contact-info h2 {
+      font-family: 'Syne', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+      letter-spacing: -1px;
+    }
+    .contact-info p { color: var(--text-muted); line-height: 1.6; margin-bottom: 2rem; }
+    .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 1rem 1.3rem;
+      text-decoration: none;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .contact-link:hover {
+      background: var(--surface-hover);
+      border-color: var(--accent);
+      transform: translateX(4px);
+    }
+    .contact-link-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .contact-link-text strong { display: block; font-weight: 600; font-size: 0.9rem; }
+    .contact-link-text span { color: var(--text-muted); font-size: 0.8rem; }
+    .contact-form {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 2rem;
+    }
+    .contact-form h3 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+    }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9rem;
+      transition: border-color 0.2s;
+      outline: none;
+      resize: none;
+    }
+    .form-group input:focus, .form-group textarea:focus { border-color: var(--accent); }
+    .form-group textarea { height: 100px; }
+    .btn-send {
+      width: 100%;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 0.85rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .btn-send:hover { opacity: 0.9; transform: translateY(-2px); }
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      position: relative;
+      z-index: 1;
+    }
+    footer span { color: var(--accent2); }
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3));
+      z-index: 999;
+      width: 0%;
+    }
+    .cursor-glow {
+      position: fixed;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(124,111,255,0.07), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+      transform: translate(-50%, -50%);
+      transition: left 0.15s, top 0.15s;
+    }
+    @media(max-width:640px) {
+      nav { padding: 1rem 1.5rem; }
+      .nav-links li:not(:last-child):not(:nth-last-child(2)) { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="scroll-progress" id="scroll-progress"></div>
+<div class="cursor-glow" id="cursor-glow"></div>
+<canvas id="bg-canvas"></canvas>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">S.PATIL</div>
+  <ul class="nav-links">
+    <li><a href="#hero">Home</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#achievements">Achievements</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><button id="theme-btn" title="Toggle theme">☀️</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<header class="hero" id="hero">
+  <div class="hero-inner">
+    <img src="assets/profile.png" alt="Shrisha Patil" class="hero-avatar"
+      onerror="this.style.background='linear-gradient(135deg,#7c6fff33,#ff6f9c33)';this.style.display='flex';this.alt='SP'"/>
+    <div class="hero-tag">✦ MIT VishwaPrayag University</div>
+    <h1>Hello, I'm<br/><span>Shrisha Patil</span></h1>
+    <p class="hero-sub">A passionate student and developer building intelligent solutions at the intersection of AI and Web Development.</p>
+    <a href="#projects" class="hero-cta">View My Work ↓</a>
+  </div>
+</header>
+
+<!-- ABOUT -->
+<div class="divider"></div>
+<section id="about">
+  <div class="section-wrap reveal">
+    <p class="section-label">Who I Am</p>
+    <h2 class="section-title">About Me</h2>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>🎓 Education</h3>
+        <p><strong>MIT VishwaPrayag University</strong><br/>B.Tech — Computer Science & Engineering<br/>Pursuing my degree with a focus on AI and Software Development.</p>
+      </div>
+      <div class="about-card">
+        <h3>🎯 Goals</h3>
+        <p>Aspiring to become a skilled <strong>Software Engineer</strong> who builds impactful products through creativity, technical rigor, and a passion for innovation.</p>
+      </div>
+      <div class="about-card">
+        <h3>💡 Interests</h3>
+        <p>Deeply interested in <strong>Artificial Intelligence</strong> and <strong>Web Development</strong>. I love exploring new frameworks and emerging technologies.</p>
+      </div>
+      <div class="about-card">
+        <h3>⚡ Strengths</h3>
+        <p>Known for strong <strong>problem-solving</strong> abilities and <strong>creativity</strong>. I thrive in collaborative, fast-paced environments and learn quickly.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<div class="divider"></div>
+<section id="achievements">
+  <div class="section-wrap reveal">
+    <p class="section-label">Credentials</p>
+    <h2 class="section-title">Achievements & Certificates</h2>
+    <div class="achieve-grid">
+      <div class="achieve-card">
+        <div class="achieve-icon">🤖</div>
+        <h3>AI4A Certificate</h3>
+        <p>Completed the Artificial Intelligence for All (AI4A) project — applying machine learning concepts to a real-world problem.</p>
+        <span class="achieve-badge">AI / ML</span>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🎨</div>
+        <h3>Design Thinking Project</h3>
+        <p>Developed a human-centric engineering solution through the Design Thinking framework at MIT VishwaPrayag University.</p>
+        <span class="achieve-badge">Innovation</span>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🔧</div>
+        <h3>ACE Certificate</h3>
+        <p>Earned the Advanced Engineering Core certification, validating proficiency in core engineering principles and applications.</p>
+        <span class="achieve-badge">Engineering</span>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">📊</div>
+        <h3>MATLAB / Coursera</h3>
+        <p>Completed Coursera's professional MATLAB certification — covering data analysis, simulation, and algorithm development.</p>
+        <span class="achieve-badge">Coursera</span>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🌐</div>
+        <h3>NetAcad Certificate</h3>
+        <p>Cisco NetAcad certification in networking fundamentals and IT infrastructure concepts.</p>
+        <span class="achieve-badge">Networking</span>
+      </div>
+      <div class="achieve-card">
+        <div class="achieve-icon">🧠</div>
+        <h3>Yuva AI Certificate</h3>
+        <p>Recognized for project completion in Yuva AI — a national initiative promoting AI literacy among students.</p>
+        <span class="achieve-badge">National Program</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<div class="divider"></div>
+<section id="projects">
+  <div class="section-wrap reveal">
+    <p class="section-label">What I've Built</p>
+    <h2 class="section-title">Projects</h2>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-thumb">🤖</div>
+        <div class="project-body">
+          <h3>AI4A Project</h3>
+          <p>End-to-end AI project applying machine learning techniques to solve a real-world problem as part of the AI4A national initiative.</p>
+          <div class="project-tags">
+            <span class="project-tag">Python</span>
+            <span class="project-tag">Machine Learning</span>
+            <span class="project-tag">AI</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">💡</div>
+        <div class="project-body">
+          <h3>Design Thinking Project</h3>
+          <p>Human-centric engineering solution using Design Thinking — from empathy mapping and ideation to prototyping and testing.</p>
+          <div class="project-tags">
+            <span class="project-tag">Innovation</span>
+            <span class="project-tag">UX Research</span>
+            <span class="project-tag">Prototyping</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">⚙️</div>
+        <div class="project-body">
+          <h3>ACE Coursera Project</h3>
+          <p>Applied engineering project completed as part of ACE Coursera specialization, showcasing structured problem-solving skills.</p>
+          <div class="project-tags">
+            <span class="project-tag">Engineering</span>
+            <span class="project-tag">Coursera</span>
+            <span class="project-tag">Applied</span>
+          </div>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-thumb">🌐</div>
+        <div class="project-body">
+          <h3>Portfolio Website</h3>
+          <p>This portfolio — designed and built with pure HTML, CSS, and JS featuring particle animations, glassmorphism, and dark/light mode.</p>
+          <div class="project-tags">
+            <span class="project-tag">HTML</span>
+            <span class="project-tag">CSS</span>
+            <span class="project-tag">JavaScript</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<div class="divider"></div>
+<section id="gallery">
+  <div class="section-wrap reveal">
+    <p class="section-label">Visual Record</p>
+    <h2 class="section-title">Gallery</h2>
+    <div class="gallery-grid">
+      <div class="gallery-item">🏆<span class="gallery-label">AI4A Certificate</span></div>
+      <div class="gallery-item">📜<span class="gallery-label">MATLAB Cert</span></div>
+      <div class="gallery-item">🔧<span class="gallery-label">ACE Certificate</span></div>
+      <div class="gallery-item">🌐<span class="gallery-label">NetAcad Cert</span></div>
+      <div class="gallery-item">🧠<span class="gallery-label">Yuva AI Cert</span></div>
+      <div class="gallery-item">🎨<span class="gallery-label">Design Thinking</span></div>
+      <div class="gallery-item">📸<span class="gallery-label">Project Work</span></div>
+      <div class="gallery-item">🎓<span class="gallery-label">Campus Event</span></div>
+    </div>
+    <p style="color:var(--text-muted);font-size:0.82rem;margin-top:1.5rem;text-align:center;">Replace emoji cards with <code style="color:var(--accent);">&lt;img src="assets/cert1.jpg"&gt;</code> tags for your actual photos &amp; certificates.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<div class="divider"></div>
+<section id="contact">
+  <div class="section-wrap reveal">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <p class="section-label">Get In Touch</p>
+        <h2>Let's Connect</h2>
+        <p>Open to opportunities, collaborations, or just a good conversation about tech and design.</p>
+        <div class="contact-links">
+          <a href="mailto:ShrishPatil@email.com" class="contact-link">
+            <div class="contact-link-icon">✉️</div>
+            <div class="contact-link-text">
+              <strong>Email</strong>
+              <span>ShrishPatil@email.com</span>
+            </div>
+          </a>
+          <a href="tel:1234567890" class="contact-link">
+            <div class="contact-link-icon">📞</div>
+            <div class="contact-link-text">
+              <strong>Phone</strong>
+              <span>+91 1234567890</span>
+            </div>
+          </a>
+          <a href="#" class="contact-link">
+            <div class="contact-link-icon">💼</div>
+            <div class="contact-link-text">
+              <strong>LinkedIn</strong>
+              <span>linkedin.com/in/shrisha-patil</span>
+            </div>
+          </a>
+          <a href="https://github.com/pshrisha90" target="_blank" class="contact-link">
+            <div class="contact-link-icon">🐙</div>
+            <div class="contact-link-text">
+              <strong>GitHub</strong>
+              <span>github.com/pshrisha90</span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-form">
+        <h3>Send a Message</h3>
+        <div class="form-group">
+          <label>Your Name</label>
+          <input type="text" placeholder="John Doe"/>
+        </div>
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" placeholder="john@example.com"/>
+        </div>
+        <div class="form-group">
+          <label>Message</label>
+          <textarea placeholder="Hi Shrisha, I'd like to connect..."></textarea>
+        </div>
+        <button class="btn-send" id="send-btn">Send Message ✦</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Crafted with ❤️ by <span>Shrisha Patil</span> · © 2026 · MIT VishwaPrayag University</p>
+</footer>
+
+<script>
+// ── ANIMATED PARTICLE CANVAS ──
+const canvas = document.getElementById('bg-canvas');
+const ctx = canvas.getContext('2d');
+let W, H, particles = [];
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+class Particle {
+  constructor() { this.init(); }
+  init() {
+    this.x = Math.random() * W;
+    this.y = Math.random() * H;
+    this.r = Math.random() * 1.4 + 0.4;
+    this.vx = (Math.random() - 0.5) * 0.35;
+    this.vy = (Math.random() - 0.5) * 0.35;
+    this.alpha = Math.random() * 0.5 + 0.15;
+    this.phase = Math.random() * Math.PI * 2;
+  }
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.phase += 0.018;
+    if (this.x < -10 || this.x > W + 10 || this.y < -10 || this.y > H + 10) this.init();
+  }
+  draw() {
+    const a = this.alpha * (0.65 + 0.35 * Math.sin(this.phase));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(124,111,255,${a})`;
+    ctx.fill();
+  }
+}
+
+function initParticles() {
+  particles = [];
+  for (let i = 0; i < 130; i++) particles.push(new Particle());
+}
+
+function drawLines() {
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const dx = particles[i].x - particles[j].x;
+      const dy = particles[i].y - particles[j].y;
+      const d = Math.sqrt(dx*dx + dy*dy);
+      if (d < 110) {
+        ctx.beginPath();
+        ctx.moveTo(particles[i].x, particles[i].y);
+        ctx.lineTo(particles[j].x, particles[j].y);
+        ctx.strokeStyle = `rgba(124,111,255,${0.07*(1-d/110)})`;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+let t = 0;
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  t += 0.001;
+  const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
+  if (isDark) {
+    // Animated gradient orbs
+    [[0.2 + Math.sin(t)*0.08, 0.3, 'rgba(124,111,255,0.07)', 380],
+     [0.8 + Math.cos(t*0.9)*0.06, 0.7, 'rgba(255,111,156,0.055)', 320],
+     [0.5 + Math.sin(t*0.7)*0.1, 0.5, 'rgba(111,247,200,0.04)', 260]
+    ].forEach(([ox,oy,col,r]) => {
+      const g = ctx.createRadialGradient(ox*W, oy*H, 0, ox*W, oy*H, r);
+      g.addColorStop(0, col); g.addColorStop(1, 'transparent');
+      ctx.fillStyle = g; ctx.fillRect(0,0,W,H);
+    });
+  }
+  particles.forEach(p => { p.update(); p.draw(); });
+  drawLines();
+  requestAnimationFrame(animate);
+}
+
+resize(); initParticles(); animate();
+window.addEventListener('resize', () => { resize(); initParticles(); });
+
+// ── THEME TOGGLE ──
+const themeBtn = document.getElementById('theme-btn');
+themeBtn.addEventListener('click', () => {
+  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.documentElement.setAttribute('data-theme', isDark ? 'light' : 'dark');
+  themeBtn.textContent = isDark ? '🌙' : '☀️';
+});
+
+// ── SCROLL PROGRESS ──
+const progress = document.getElementById('scroll-progress');
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  progress.style.width = pct + '%';
+});
+
+// ── REVEAL ON SCROLL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('active'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── CURSOR GLOW ──
+const glow = document.getElementById('cursor-glow');
+document.addEventListener('mousemove', e => {
+  glow.style.left = e.clientX + 'px';
+  glow.style.top = e.clientY + 'px';
+});
+
+// ── SEND BUTTON ──
+document.getElementById('send-btn').addEventListener('click', () => {
+  alert('Message sent! Shrisha will get back to you soon 🚀');
+});
+</script>
+</body>
+</html>
